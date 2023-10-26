@@ -1,4 +1,16 @@
+
+
 body {
-    background-color: #ddd;
+    background-color: black;
 }
 
+#board {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#player {
+    background-color: greenyellow;
+    position: absolute;
+}
