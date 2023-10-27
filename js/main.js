@@ -1,77 +1,44 @@
 console.log('js loaded....');
 
-class Player {
-	constructor() {
-		this.height = 14;
-		this.width = 16;
-		this.positionX = 50 - this.width / 2;
-		this.positionY = 0;
-		this.playerElm = document.getElementById('player');
-
-		this.playerElm.style.width = this.width + 'vw';
-		this.playerElm.style.height = this.height + 'vh';
-
-		this.playerElm.style.bottom = this.positionY + 'vh';
-		this.playerElm.style.left = this.positionX + 'vw';
-	}
-	moveLeft() {
-		this.positionX--;
-		this.playerElm.style.left = this.positionX + 'vw';
-	}
-	moveRight() {
-		this.positionX++;
-		this.playerElm.style.left = this.positionX + 'vw';
-	}
-}
-
-class Obstacle {
-	constructor() {
-		this.height = 10;
-		this.width = 10;
-		this.positionX = Math.floor(Math.random() * 100 - this.width);
-		this.positionY = 100;
-		this.createObstacle = undefined;
-
-		this.createDomElement();
-	}
-	createDomElement() {
-		/// creating new element
-		this.createObstacle = document.createElement('div');
-
-		// add created element
-		this.createObstacle.classList.add('obstacle');
-		this.createObstacle.style.width = this.width + 'vw';
-		this.createObstacle.style.height = this.height + 'vh';
-		this.createObstacle.style.left = this.positionX + 'vw';
-		this.createObstacle.style.bottom = this.positionY + 'vh';
-
-		// append to the dom: `parentElm.appendChild()`
-		const parentElm = document.getElementById('board');
-		parentElm.appendChild(this.createObstacle);
-	}
-	moveDown() {
-		this.positionY--;
-		this.createObstacle.style.bottom = this.positionY + 'vh';
-	}
-}
-
 const player = new Player();
-
 const obstaclesArray = [];
 
 //create obstacles
 setInterval(() => {
 	const newObstacle = new Obstacle();
 	obstaclesArray.push(newObstacle);
-}, 2000);
+}, 1000);
 
-//move obstacles (ex. every XXX ms, move all the obstacles that we have in the array)
+//update obstacles
 setInterval(() => {
 	obstaclesArray.forEach((obstacleInstance) => {
+		//move obstacles (ex. every XXX ms, move all the obstacles that we have in the array)
 		obstacleInstance.moveDown();
+
+		//remove obstacles if outside
+		if (obstacleInstance.positionY < 0 - obstacleInstance.height) {
+			//remove dom element
+			obstacleInstance.createObstacle.remove();
+			console.log('removed');
+			//remove from the array
+			obstaclesArray.shift();
+		}
+
+		//detect collision
+		if (
+			player.positionX < obstacleInstance.positionX + obstacleInstance.width &&
+			player.positionX + player.width > obstacleInstance.positionX &&
+			player.positionY < obstacleInstance.positionY + obstacleInstance.height &&
+			player.positionY + player.height > obstacleInstance.positionY
+		) {
+			// Collision detected!
+			console.log('Game Over');
+			location.href = './game_over.html';
+		}
 	});
 }, 50);
 
+// attach event listeners
 document.addEventListener('keydown', (e) => {
 	switch (e.code) {
 		case 'ArrowLeft':

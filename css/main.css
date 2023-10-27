@@ -2,6 +2,13 @@
 
 body {
     background-color: black;
+    color: white;
+    align-items: center;
+    overflow: hidden;/* One option to hide obstacles */
+    background-image: url("../imgs/background.jpg");
+    background-position: 0%;
+    background-repeat: no-repeat;
+    background-size: auto;
 }
 
 #board {
@@ -18,4 +25,20 @@ body {
 .obstacle {
     background-color: orange;
     position: absolute;
+}
+
+#play-again {
+    align-items: center;
+    align-self: center;
+    text-align: center;
+}
+
+#play-again button a{
+    text-decoration: none;
+    color: black;
+    
+}
+
+#play-again button:hover{
+    background-color: yellowgreen;
 }
